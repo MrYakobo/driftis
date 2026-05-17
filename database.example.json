@@ -1,0 +1,98 @@
+{
+  "documents": [
+    {
+      "id": "pastor-mic",
+      "title": "Pastorns mikrofon – inget ljud",
+      "path": "docs/pastor-mic.md",
+      "category": "Ljud",
+      "tags": [
+        "ljud",
+        "mikrofon",
+        "trådlös",
+        "pastor",
+        "audio",
+        "microphone"
+      ],
+      "updatedAt": "2026-05-17"
+    },
+    {
+      "id": "mixer-routing",
+      "title": "Mixer-routing problem",
+      "path": "docs/mixer-routing.md",
+      "category": "Ljud",
+      "tags": [
+        "ljud",
+        "mixer",
+        "routing",
+        "audio"
+      ],
+      "updatedAt": "2026-05-17"
+    },
+    {
+      "id": "obs-issues",
+      "title": "OBS-streamproblem",
+      "path": "docs/obs-issues.md",
+      "category": "Livestream",
+      "tags": [
+        "livestream",
+        "obs",
+        "streaming",
+        "stream"
+      ],
+      "updatedAt": "2026-05-17"
+    },
+    {
+      "id": "stream-checklist",
+      "title": "Checklista för stream",
+      "path": "docs/stream-checklist.md",
+      "category": "Livestream",
+      "tags": [
+        "livestream",
+        "checklista",
+        "setup",
+        "stream"
+      ],
+      "updatedAt": "2026-05-17"
+    },
+    {
+      "id": "projector-black-screen",
+      "title": "Projektorn visar svart bild",
+      "path": "docs/projector-black-screen.md",
+      "category": "Projektion",
+      "tags": [
+        "projektion",
+        "projektor",
+        "video",
+        "svart",
+        "projector"
+      ],
+      "updatedAt": "2026-05-17"
+    },
+    {
+      "id": "guest-speaker-checklist",
+      "title": "Checklista för gästtalare",
+      "path": "docs/guest-speaker-checklist.md",
+      "category": "Setup",
+      "tags": [
+        "setup",
+        "gäst",
+        "checklista",
+        "talare"
+      ],
+      "updatedAt": "2026-05-17"
+    }
+  ],
+  "incidents": [
+    {
+      "id": "1779012004813",
+      "query": "Projektorn är svart",
+      "title": "Projektorn är svart",
+      "matchedDocs": [
+        "projector-black-screen"
+      ],
+      "status": "unresolved",
+      "response": "# Projektorn visar svart bild\n\nIngen stress – det här är ett vanligt problem och brukar gå att lösa snabbt! Här är stegen att gå igenom:\n\n1. **Kontrollera att projektorn är påslagen** – Lyser lampan på projektorn? Tryck på strömknappen om den verkar vara av.\n\n2. **Kontrollera HDMI-kabeln i båda ändar** – Dra ur och sätt tillbaka kabeln både vid projektorn och vid datorn. Se till att den sitter ordentligt.\n\n3. **Kontrollera ingångskällan på projektorn** – Använd fjärrkontrollen eller knapparna på projektorn för att byta till rätt HDMI-ingång (t.ex. HDMI 1 eller HDMI 2).\n\n4. **Kontrollera datorns skärminställningar** – På datorn, tryck **Windows + P** (eller motsvarande på Mac) och välj \"Duplicera\" eller \"Utöka\".\n\n5. **Testa med en annan HDMI-kabel** – Om det finns en reservkabel tillgänglig, byt ut den nuvarande.\n\n6. **Starta om presentationsprogrammet** – Stäng och öppna programmet (t.ex. ProPresenter eller PowerPoint) igen.\n\n---\n\nOm inget av detta hjälper och projektorn inte svarar alls, kontakta **teknikansvarig** för vidare hjälp.\n\nHur gick det? Säg till om du fastnar på något steg!",
+      "timestamp": "2026-05-17T10:00:04.814Z"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+database.json
+node_modules
+dist
+.env
+*.log
+database.json
