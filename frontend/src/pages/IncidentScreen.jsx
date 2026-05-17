@@ -132,12 +132,12 @@ export default function IncidentScreen({ onNewIncident }) {
       {messages.length === 0 && !loading ? (
         <div className="flex-1 flex flex-col items-center justify-center gap-8">
           <h1 className="text-3xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Vad krånglar just nu?</h1>
-          <div className="grid grid-cols-2 gap-3 w-full max-w-lg">
+          <div className="flex gap-2 flex-wrap max-w-lg">
             {suggestions.map(s => (
               <button
                 key={s}
                 onClick={() => submit(s)}
-                className="border border-gray-200 rounded-2xl px-4 py-4 text-sm text-left text-gray-600 hover:bg-gray-50 transition-colors"
+                className="border border-gray-200 dark:border-white/10 rounded-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 hover:border-gray-300 transition-colors cursor-pointer"
               >
                 {s}
               </button>
@@ -148,7 +148,7 @@ export default function IncidentScreen({ onNewIncident }) {
               value={query}
               onChange={e => setQuery(e.target.value)}
               placeholder="Beskriv problemet..."
-              className="w-full bg-gray-100 rounded-2xl px-5 py-4 pr-14 outline-none focus:ring-2 focus:ring-indigo-200 border-none"
+              className="w-full bg-gray-100 dark:bg-white/10 rounded-2xl px-5 py-4 pr-14 outline-none focus:ring-2 focus:ring-indigo-200 border-none"
             />
             <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 bg-indigo-600 text-white p-2.5 rounded-xl hover:bg-indigo-500 transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
@@ -157,25 +157,24 @@ export default function IncidentScreen({ onNewIncident }) {
         </div>
       ) : (
         <>
-          <div className="flex-1 overflow-y-auto space-y-4 pb-4">
+          <div className="flex-1 space-y-4 pb-4">
             {messages.map((msg, i) => (
               <div key={i}>
                 {msg.role === 'user' && (
                   <div className="flex justify-end">
-                    <div className="bg-indigo-50 rounded-2xl px-5 py-3.5 max-w-md">
+                    <div className="bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl px-5 py-3.5 max-w-md">
                       <p className="text-gray-700">{msg.text}</p>
                     </div>
                   </div>
                 )}
                 {msg.role === 'assistant' && (
-                  <div className="rounded-2xl p-5 prose max-w-none">
+                  <div className="rounded-2xl p-5 prose dark:prose-invert max-w-none">
                     <ReactMarkdown>{msg.text}</ReactMarkdown>
                     {msg.sources?.length > 0 && (
-                      <div className="not-prose mt-4 pt-3 border-t border-gray-100 flex gap-2 flex-wrap">
-                        <span className="text-xs text-gray-400">Källor:</span>
+                      <div className="not-prose mt-3 flex gap-1.5 flex-wrap items-center">
                         {msg.sources.map(s => (
-                          <a key={s.id} href={`/docs/${s.id}`} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
-                            {s.title}
+                          <a key={s.id} href={`/docs/${s.id}`} className="inline-flex items-center text-xs bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-full hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                            📄 {s.title}
                           </a>
                         ))}
                       </div>
@@ -188,13 +187,13 @@ export default function IncidentScreen({ onNewIncident }) {
 
             <div ref={bottomRef} />
           </div>
-          <div className="pt-3 pb-2">
+          <div className="sticky bottom-0 pt-3 pb-2 bg-[#f9f9f9] dark:bg-[#1e1e1e]">
             <form onSubmit={e => { e.preventDefault(); submit() }} className="relative">
               <input
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder="Skriv ett meddelande..."
-                className="w-full bg-gray-100 rounded-2xl px-5 py-4 pr-14 outline-none focus:ring-2 focus:ring-indigo-200 border-none"
+                className="w-full bg-gray-100 dark:bg-white/10 rounded-2xl px-5 py-4 pr-14 outline-none focus:ring-2 focus:ring-indigo-200 border-none"
               />
               <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 bg-indigo-600 text-white p-2.5 rounded-xl hover:bg-indigo-500 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>

@@ -228,4 +228,34 @@ app.delete('/api/incident/:id', async (req, res) => {
   res.json({ success: true });
 });
 
+const SETTINGS_PATH = join(ROOT, 'settings.json');
+
+async function readSettings() {
+  try {
+    return JSON.parse(await readFile(SETTINGS_PATH, 'utf-8'));
+  } catch {
+    return { appName: 'Driftassistent', orgName: 'AI Church Ops' };
+  }
+}
+
+async function writeSettings(s) {
+  await writeFile(SETTINGS_PATH, JSON.stringify(s, null, 2));
+}
+
+app.get('/api/status', async (req, res) => {
+  const settings = await readSettings();
+  res.json({ kiroReady, contextUsage: kiro.contextUsage, settings });
+});
+
+app.get('/api/settings', async (req, res) => {
+  res.json(await readSettings());
+});
+
+app.put('/api/settings', async (req, res) => {
+  const settings = await readSettings();
+  Object.assign(settings, req.body);
+  await writeSettings(settings);
+  res.json(settings);
+});
+
 app.listen(3001, () => console.log('Backend running on http://localhost:3001'));

@@ -8,8 +8,9 @@ export class KiroClient {
   constructor() {
     this.connection = null;
     this.proc = null;
-    this.collectedText = new Map(); // sessionId -> text chunks
-    this._chunkCallbacks = new Map(); // sessionId -> onChunk fn
+    this.collectedText = new Map();
+    this._chunkCallbacks = new Map();
+    this.contextUsage = 0;
   }
 
   async start() {
@@ -51,7 +52,11 @@ export class KiroClient {
         }
       },
       async writeTextFile() { return {}; },
-      async extNotification() {},
+      async extNotification(method, params) {
+        if (method === '_kiro.dev/metadata' && params?.contextUsagePercentage != null) {
+          self.contextUsage = params.contextUsagePercentage;
+        }
+      },
       async extMethod() { return {}; },
     }), stream);
 
