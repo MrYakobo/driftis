@@ -1,4 +1,4 @@
-# Driftminne
+# driftis
 
 AI-powered operational memory for volunteer organizations. Helps inexperienced volunteers troubleshoot technical issues with the confidence of experienced team members.
 
