@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import { Pencil, Save, X, Bold, Italic, Heading2, List, ListOrdered, Undo2, Redo2 } from 'lucide-react'
 import { useEditor, EditorContent } from '@tiptap/react'
@@ -31,8 +31,11 @@ function Toolbar({ editor }) {
 
 export default function DocsBrowser() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const [content, setContent] = useState('')
   const [editing, setEditing] = useState(false)
+  const [creating, setCreating] = useState(id === 'new')
+  const [newTitle, setNewTitle] = useState('')
 
   const editor = useEditor({
     extensions: [
@@ -45,9 +48,44 @@ export default function DocsBrowser() {
   })
 
   useEffect(() => {
+    if (id === 'new') { setCreating(true); return }
+    setCreating(false)
     fetch(`/api/doc/${id}`).then(r => r.json()).then(d => setContent(d.content))
     setEditing(false)
   }, [id])
+
+  async function createDoc(e) {
+    e.preventDefault()
+    if (!newTitle.trim()) return
+    const res = await fetch('/api/docs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: newTitle })
+    })
+    const data = await res.json()
+    if (data.id) {
+      navigate(`/docs/${data.id}`)
+      location.reload()
+    }
+  }
+
+  if (creating) {
+    return (
+      <div className="max-w-md pt-12 space-y-4">
+        <h1 className="text-xl font-semibold">Nytt dokument</h1>
+        <form onSubmit={createDoc} className="space-y-3">
+          <input
+            autoFocus
+            value={newTitle}
+            onChange={e => setNewTitle(e.target.value)}
+            placeholder="Titel..."
+            className="w-full border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-indigo-200"
+          />
+          <button type="submit" className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm hover:bg-indigo-500 transition-colors cursor-pointer">Skapa</button>
+        </form>
+      </div>
+    )
+  }
 
   function startEdit() {
     const html = marked(content)

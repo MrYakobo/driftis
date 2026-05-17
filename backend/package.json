@@ -6,7 +6,9 @@
   },
   "dependencies": {
     "@agentclientprotocol/sdk": "^0.21.1",
+    "@simplewebauthn/server": "^13.3.0",
     "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
     "express": "^4.21.0"
   }
 }

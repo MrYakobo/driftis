@@ -5,3 +5,4 @@ dist
 *.log
 database.json
 settings.json
+auth.json

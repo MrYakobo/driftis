@@ -1,9 +1,11 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { readFile, writeFile } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { KiroClient } from './kiro.js';
+import { authRoutes, authMiddleware } from './auth.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..');
@@ -12,6 +14,12 @@ const DB_PATH = join(ROOT, 'database.json');
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Auth routes (public)
+authRoutes(app);
+
+// Protect all other routes
+app.use(authMiddleware);
 
 const SYSTEM_PROMPT_PATH = join(__dirname, 'system_prompt.md');
 
@@ -173,6 +181,19 @@ app.post('/api/feedback', async (req, res) => {
   if (resolution) incident.resolution = resolution;
   await writeDB(db);
   res.json({ success: true });
+});
+
+app.post('/api/docs', async (req, res) => {
+  const { title } = req.body;
+  if (!title) return res.status(400).json({ error: 'title required' });
+  const id = title.toLowerCase().replace(/[^a-zåäö0-9]+/g, '-').replace(/-+$/, '');
+  const path = `docs/${id}.md`;
+  const db = await readDB();
+  if (db.documents.find(d => d.id === id)) return res.status(409).json({ error: 'exists' });
+  await writeFile(join(ROOT, path), `# ${title}\n`);
+  db.documents.push({ id, title, path, category: 'Övrigt', tags: [], updatedAt: new Date().toISOString().split('T')[0] });
+  await writeDB(db);
+  res.json({ id });
 });
 
 app.get('/api/docs', async (req, res) => {

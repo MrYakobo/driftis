@@ -1,11 +1,30 @@
 import { useState, useEffect, useRef } from 'react'
 import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
-import { MessageSquarePlus, FileText, MessageSquare, CircleCheck, Ellipsis, Sun, Moon, Settings as SettingsIcon } from 'lucide-react'
+import { MessageSquarePlus, FileText, MessageSquare, CircleCheck, Ellipsis, Sun, Moon, Settings as SettingsIcon, LogOut, Plus } from 'lucide-react'
 import IncidentScreen from './pages/IncidentScreen'
 import DocsBrowser from './pages/DocsBrowser'
 import Settings from './pages/Settings'
+import AuthGate from './AuthGate'
+
+// Global fetch wrapper to include session token
+const originalFetch = window.fetch
+window.fetch = (url, opts = {}) => {
+  const token = localStorage.getItem('session')
+  if (token && typeof url === 'string' && url.startsWith('/api/') && !url.includes('/api/auth/')) {
+    opts.headers = { ...opts.headers, 'x-session': token }
+  }
+  return originalFetch(url, opts)
+}
 
 export default function App() {
+  return (
+    <AuthGate>
+      {({ userName }) => <AppShell userName={userName} />}
+    </AuthGate>
+  )
+}
+
+function AppShell({ userName }) {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const [docs, setDocs] = useState([])
@@ -148,7 +167,12 @@ export default function App() {
           )}
 
           <div className="pt-4 mt-3 border-t border-white/10">
-            <p className="px-3 pb-2 text-[11px] uppercase text-gray-500 tracking-wider font-medium">Dokumentation</p>
+            <div className="flex items-center justify-between px-3 pb-2">
+              <p className="text-[11px] uppercase text-gray-500 tracking-wider font-medium">Dokumentation</p>
+              <button onClick={() => navigate('/docs/new')} className="p-0.5 rounded hover:bg-white/10 text-gray-500 cursor-pointer" title="Nytt dokument">
+                <Plus size={14} />
+              </button>
+            </div>
             {docs.map(doc => (
               <Link
                 key={doc.id}
@@ -163,7 +187,7 @@ export default function App() {
             ))}
           </div>
         </nav>
-        <div className="px-3 py-3 border-t border-white/10">
+        <div className="px-3 py-3 border-t border-white/10 space-y-1">
           <Link
             to="/settings"
             className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
@@ -173,7 +197,13 @@ export default function App() {
             <SettingsIcon size={15} />
             Inställningar
           </Link>
-          {status && <p className="px-3 pt-2 text-[10px] text-gray-600">{Math.round(status.contextUsage)}% ctx</p>}
+          <div className="flex items-center justify-between px-3 py-1.5">
+            <span className="text-xs text-gray-500 truncate">{userName}</span>
+            <button onClick={() => { localStorage.removeItem('session'); location.reload() }} className="p-1 rounded hover:bg-white/10 text-gray-500 cursor-pointer" title="Logga ut">
+              <LogOut size={13} />
+            </button>
+          </div>
+          {status && <p className="px-3 text-[10px] text-gray-600">{Math.round(status.contextUsage)}% ctx</p>}
         </div>
       </aside>
       <main className="flex-1 overflow-y-auto bg-[#f9f9f9] dark:bg-[#1e1e1e]">
